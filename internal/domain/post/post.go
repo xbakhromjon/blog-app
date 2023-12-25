@@ -1,4 +1,4 @@
-package models
+package post
 
 type Post struct {
 	Id      int

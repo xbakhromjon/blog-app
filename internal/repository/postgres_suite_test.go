@@ -34,7 +34,7 @@ func (s *PostgresTestSuite) SetupSuite() {
 		log.Fatal(err)
 	}
 	//Setup migration
-	m, err := migrate.NewWithDatabaseInstance("file://../../migrations", databaseTestName, sqlLite3)
+	m, err := migrate.NewWithDatabaseInstance("file://../../migrations/test", databaseTestName, sqlLite3)
 	s.m = m
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func (s *PostgresTestSuite) SetupSuite() {
 func (s *PostgresTestSuite) TearDownTest() {
 	// Truncate all tables
 
-	tables := []string{"users", "post"}
+	tables := []string{"users", "posts"}
 	for _, tableName := range tables {
 		deleteQuery := "delete from " + tableName
 		_, err := s.db.Exec(deleteQuery)

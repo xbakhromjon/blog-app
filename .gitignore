@@ -10,3 +10,4 @@ bin/
 .werf_secret_key
 .go-cache
 .go
+/app_test_db

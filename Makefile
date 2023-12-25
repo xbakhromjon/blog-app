@@ -43,8 +43,35 @@ migration-up:
 	sleep 2
 	docker-compose run --rm migrate -path=migrations/ -database='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=disable' up
 
+
+.PHONY: test-migration-up
+test-migration-up:
+	@echo "Test migrations Up"
+	sleep 2
+	docker-compose run --rm migrate -path=migrations/test -database='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=disable' up
+
+.PHONY: migration-down
+migration-down:
+	@echo "migrations Down"
+	sleep 2
+	docker-compose run --rm migrate -path=migrations/ -database='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=disable' down
+
+.PHONY: test-migration-down
+test-migration-down:
+	@echo "Test migrations Down"
+	sleep 2
+	docker-compose run --rm migrate -path=migrations/test -database='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=disable' down
+
+
 .PHONY: migration-generate
 migration-generate:
 	@echo "Generation migration file $(name)"
 	sleep 2
 	docker-compose run --rm migrate create -ext sql -dir ./migrations -seq $(name)
+
+
+.PHONY: test-migration-generate
+test-migration-generate:
+	@echo "Generation test migration file $(name)"
+	sleep 2
+	docker-compose run --rm migrate create -ext sql -dir ./migrations/test -seq $(name)
