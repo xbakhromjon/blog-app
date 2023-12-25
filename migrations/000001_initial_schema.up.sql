@@ -1,7 +1,8 @@
 CREATE TABLE "users" (
                          "id" bigserial PRIMARY KEY,
-                         "username" varchar UNIQUE NOT NULL,
-                         "password" varchar NOT NULL
+                         "email" varchar NOT NULL ,
+                         "firstname" varchar,
+                         "lastname" varchar
 );
 
 CREATE TABLE "posts" (
