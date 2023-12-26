@@ -15,7 +15,12 @@ func (u *userMockRepository) Save(user *user.User) (int64, error) {
 	return 1, nil
 }
 
-func (u *userMockRepository) ExistsByEmail(email string) bool {
+func (u *userMockRepository) ExistsByEmail(email string) (bool, error) {
 
-	return true
+	return true, nil
+}
+
+func (u *userMockRepository) ExistsById(id int64) (bool, error) {
+
+	return true, nil
 }
