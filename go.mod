@@ -6,6 +6,8 @@ require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/go-chi/render v1.0.3
+	github.com/golang-jwt/jwt/v4 v4.2.0
+	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
