@@ -10,8 +10,10 @@ import (
 )
 
 func main() {
+
 	config.SetupEnv()
 	db := config.SetupDB()
+	defer db.Close()
 	config.SetupIdentityProviders()
 	r := chi.NewRouter()
 	router.SetupRouter(r, db)

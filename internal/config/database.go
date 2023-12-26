@@ -15,7 +15,6 @@ func SetupDB() *sql.DB {
 	)
 	db, _ := sql.Open("postgres", connString)
 
-	defer db.Close()
 	err := db.Ping()
 	if err != nil {
 		log.Fatal(err)

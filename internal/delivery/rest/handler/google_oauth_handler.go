@@ -6,22 +6,21 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
-	"golang-project-template/internal/delivery/rest"
 	"golang-project-template/internal/domain/auth"
 	"log"
 	"net/http"
 )
 
-type googleOauthHandler struct {
+type GoogleOauthHandler struct {
 	authUseCase auth.AuthUseCase
 }
 
-func NewGoogleOauthHandler(authUseCase auth.AuthUseCase) *googleOauthHandler {
+func NewGoogleOauthHandler(authUseCase auth.AuthUseCase) *GoogleOauthHandler {
 
-	return &googleOauthHandler{authUseCase: authUseCase}
+	return &GoogleOauthHandler{authUseCase: authUseCase}
 }
 
-func (g *googleOauthHandler) OauthLogin(write http.ResponseWriter, request *http.Request) {
+func (g *GoogleOauthHandler) OauthLogin(write http.ResponseWriter, request *http.Request) {
 	provider := chi.URLParam(request, "provider")
 	request = request.WithContext(context.WithValue(context.Background(), "provider", provider))
 	if gothUser, err := gothic.CompleteUserAuth(write, request); err == nil {
@@ -31,19 +30,23 @@ func (g *googleOauthHandler) OauthLogin(write http.ResponseWriter, request *http
 	}
 }
 
-func (g *googleOauthHandler) CallbackHandler(write http.ResponseWriter, request *http.Request) {
+func (g *GoogleOauthHandler) CallbackHandler(write http.ResponseWriter, request *http.Request) {
+	log.Println("authusecase: ", g.authUseCase)
 	provider := chi.URLParam(request, "provider")
 	request = request.WithContext(context.WithValue(context.Background(), "provider", provider))
+
 	user, err := gothic.CompleteUserAuth(write, request)
 	if err != nil {
 		fmt.Fprintln(write, err)
 		return
 	}
 	log.Printf("%+v", user)
-	signupRequest := auth.SignUpRequest{Email: user.Email, Firstname: user.FirstName, Lastname: user.LastName}
-	token, err := g.authUseCase.Signup(signupRequest)
+	log.Println(":OK")
+	authorizeRequest := auth.AuthorizeRequest{Email: user.Email, Firstname: user.FirstName, Lastname: user.LastName}
+	token, err := g.authUseCase.Authorize(authorizeRequest)
+
 	if err != nil {
-		rest.HandleError(write, request, err)
+		HandleError(write, request, err)
 		return
 	}
 	render.JSON(write, request, token)
