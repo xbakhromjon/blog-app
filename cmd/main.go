@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"golang-project-template/internal/config"
+	"golang-project-template/internal/delivery/rest/router"
 	"log"
 	"net/http"
 	"os"
@@ -11,12 +11,10 @@ import (
 
 func main() {
 	config.SetupEnv()
-	config.SetupDB()
+	db := config.SetupDB()
+	config.SetupIdentityProviders()
 	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World!"))
-	})
+	router.SetupRouter(r, db)
 	err := http.ListenAndServe(os.Getenv("HTTP_PORT"), r)
 	if err != nil {
 		log.Fatal(err)
